@@ -1,15 +1,18 @@
+import re
 
-def request_tuple(file):
-    some_file = open(file, 'r', encoding='utf-8')
-    some_list = []
-    for line in some_file:
-        remote_addr = line[:line.find('-') - 1]
-        request_type = line[line.find('"') + 1:line.find('"') + 4]
-        requested_resource = line[line.find('/d'):line.find('_') + 2]
-        some_tuple = (remote_addr, request_type, requested_resource)
-        # print(some_tuple)
-        some_list.append(some_tuple)
-    print(some_list)
-    some_file.close()
 
-request_tuple('nginx_logs.txt')
+def parse_mail(mail):
+    re_mail = re.match(r'.+\@\w+\.\w+', mail)
+    if re_mail:
+        mail_split = re_mail.group().split('@')
+        username = mail_split[0]
+        domain = mail_split[1]
+        return {'username': username, 'domain': domain}
+    else:
+        raise ValueError(f'Введенен некорректный email ({mail})')
+
+
+print(parse_mail('rws19.93@mail.ru'))
+print(parse_mail('rws19.93mail.ru'))
+
+
